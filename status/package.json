@@ -1,0 +1,9 @@
+{
+  "name": "plex-status-page",
+  "version": "1.0.0",
+  "main": "server.js",
+  "dependencies": {
+    "dockerode": "^4.0.4",
+    "express": "^4.18.2"
+  }
+}

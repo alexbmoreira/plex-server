@@ -1,0 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Arvo&family=Rubik&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+.material-icons {
+  color: inherit;
+  font-size: inherit;
+  vertical-align: middle;
+}

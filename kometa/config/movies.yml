@@ -1,0 +1,111 @@
+collections:
+  Watchparty!:
+    letterboxd_list: https://letterboxd.com/alexbmoreira/list/watchparty/
+    sync_mode: sync
+    smart_label:
+      any:
+        label: <<smart_label>>
+        all:
+          collection:
+            - Pascale Watchlist
+            - Alex Watchlist
+    radarr_add_missing: true
+  # "🍂 Fall":
+  #   letterboxd_list:
+  #     - https://letterboxd.com/alexbmoreira/list/fall-movies/
+  #   sync_mode: sync
+  #   schedule: range(9/13-11/15)
+  #   visible_library: true 
+  #   visible_home: true 
+  #   visible_shared: true 
+  #   radarr_add_missing: true
+  Stoner Movies:
+    letterboxd_list: https://letterboxd.com/buttholesurfer/list/under-the-influence-best-films-to-watch-high/
+    sync_mode: sync
+    smart_label:
+      all:
+        label: <<smart_label>>
+        unplayed: true
+  Bad Movies:
+    letterboxd_list: https://letterboxd.com/alexbmoreira/list/bad-movies/
+    collection_order: custom
+    sync_mode: sync
+    radarr_add_missing: true
+  Letterboxd Top 250:
+    letterboxd_list: https://letterboxd.com/dave/list/official-top-250-narrative-feature-films/
+    collection_order: custom
+    sync_mode: sync
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+  Pascale Watchlist:
+    letterboxd_list: https://letterboxd.com/pascalee/watchlist/
+    collection_order: custom
+    sync_mode: sync
+    radarr_add_missing: true
+  Alex Watchlist:
+    letterboxd_list: https://letterboxd.com/alexbmoreira/watchlist/
+    collection_order: custom
+    sync_mode: sync
+    radarr_add_missing: true
+  # Watch Alone:
+  #   plex_all: true
+  #   smart_label:
+  #     all:
+  #       label: <<smart_label>>
+  #       unplayed: true
+  #       label.not: Watchparty!
+  #       any:
+  #         collection.not:
+  #           - Pascale Watchlist
+  #           - Alex Watchlist
+  "90 Minutes or Less":
+    plex_all: true
+    smart_label:
+      all:
+        label: <<smart_label>>
+        duration.lte: 90
+        unplayed: true
+  "2 Hours or Less":
+    plex_all: true
+    visible_library: true
+    visible_home: true
+    visible_shared: true
+    smart_label:
+      all:
+        label: <<smart_label>>
+        duration.lte: 120
+        unplayed: true
+  "3 Hours or More":
+    plex_all: true
+    smart_label:
+      all:
+        label: <<smart_label>>
+        duration.gte: 180
+        unplayed: true
+  Animation:
+    smart_filter:
+      all:
+        genre: Animation
+  Documentaries:
+    smart_filter:
+      all:
+        genre: Documentary
+  Walt Disney Animation:
+    tmdb_company:
+      - 6125
+      - 171656
+  Pixar:
+    tmdb_company: 3
+  Studio Ghibli:
+    tmdb_company: 10342
+  Adam Sandler:
+    smart_filter:
+      any:
+        actor: tmdb
+        director: tmdb
+        producer: tmdb
+        writer: tmdb
+    tmdb_person: 19292
+  Ben Stiller:
+    tmdb_actor: 7399

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plex Apps Status</title>
+  <link rel="stylesheet" href="index.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://kit.fontawesome.com/4233858d6d.js" crossorigin="anonymous"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            success: '#00A000',
+            error: '#A42626',
+            warning: '#FFD700'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="flex flex-col items-center justify-center bg-slate-900 text-blue-100 p-8 sm:p-16 md:px-32 lg:px-64">
+  <div class="mb-8 w-full xl:w-1/2">
+    <div class="flex justify-center text-4xl sm:text-5xl mb-4">Plex Apps Status</div>
+    <div class="divide-y text-xl border rounded">
+      <div class="flex justify-between items-center p-4">
+        <div class="font-bold">Plex:</div>
+        <div class="app" id="plex"></div>
+      </div>
+      <div class="flex justify-between items-center p-4">
+        <div class="font-bold">Deluge:</div>
+        <div class="app" id="deluge"></div>
+      </div>
+      <div class="flex justify-between items-center p-4">
+        <div class="font-bold">Radarr:</div>
+        <div class="app" id="radarr"></div>
+      </div>
+      <div class="flex justify-between items-center p-4">
+        <div class="font-bold">Sonarr:</div>
+        <div class="app" id="sonarr"></div>
+      </div>
+      <div class="flex justify-between items-center p-4">
+        <div class="font-bold">Prowlarr:</div>
+        <div class="app" id="prowlarr"></div>
+      </div>
+      <div class="flex justify-between items-center p-4">
+        <div class="font-bold">Overseerr:</div>
+        <div class="app" id="overseerr"></div>
+      </div>
+    </div>
+  </div>
+  <div class="flex w-full xl:w-1/2 rounded overflow-hidden">
+    <input id="password" type="password" class="overflow-hidden w-0 transition-all duration-300 text-stone-900" placeholder="Enter password...">
+    <button id="restartButton" class="p-4 w-full justify-self-end cursor-pointer disabled:cursor-not-allowed bg-amber-600 hover:bg-amber-700 active:bg-amber-800 disabled:bg-gray-400 transition-all duration-300">
+      Restart Apps
+    </button>
+  </div>
+  <script src="index.js"></script>
+</body>
+</html>

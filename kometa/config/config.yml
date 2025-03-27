@@ -1,0 +1,140 @@
+libraries:
+  Movies:
+    operations:
+      delete_collections:
+        configured: false
+        managed: true
+      assets_for_all: false
+    collection_files:
+    - default: imdb
+      template_variables:
+        use_popular: false
+        use_lowest: false
+        visible_library: true
+        visible_home: true
+        visible_shared: true
+    - default: seasonal
+      template_variables:
+        visible_library: true
+        visible_home: true
+        visible_shared: true
+        exclude:
+        - patrick
+        - mother
+        - memorial
+        - father
+        - independence
+        - labor
+        - veteran
+        - aapi
+        - disabilities
+        - black_history
+        - lgbtq
+        - latinx
+        - women
+        name_years: 🎊 New Year's Day
+        name_valentine: 💘 Valentine's Day
+        mdblist_list_valentine: https://mdblist.com/lists/rizreflects/romance
+        name_easter: 🐰 Easter
+        name_thanksgiving: 🦃 Thanksgiving
+        schedule_thanksgiving: range(09/27-10/15)
+        name_halloween: 🎃 Halloween
+        mdblist_list_halloween: https://mdblist.com/lists/linvo/halloween-popular-movies
+        name_christmas: 🎄 Christmas
+        mdblist_list_christmas: https://mdblist.com/lists/hdlists/christmas-movies
+        append_data:
+          fall: 🍂 Fall
+        trakt_list_fall:
+        - https://trakt.tv/users/franko12/lists/fall-movies
+        schedule_fall: range(9/13-11/15)
+    - file: config/movies.yml
+    overlay_files:
+    - default: runtimes
+  TV Shows:
+    collection_files:
+    - default: imdb
+      template_variables:
+        use_popular: false
+        use_lowest: false
+settings:
+  run_order:
+  - operations
+  - metadata
+  - collections
+  - overlays
+  cache: true
+  cache_expiration: 60
+  asset_directory: config/assets
+  asset_folders: true
+  asset_depth: 0
+  create_asset_folders: true
+  prioritize_assets: true
+  dimensional_asset_rename: false
+  download_url_assets: false
+  show_missing_season_assets: false
+  show_missing_episode_assets: false
+  show_asset_not_needed: true
+  sync_mode: append
+  minimum_items: 5
+  default_collection_order:
+  delete_below_minimum: false
+  delete_not_scheduled: true
+  run_again_delay: 2
+  missing_only_released: true
+  only_filter_missing: false
+  show_unmanaged: true
+  show_unconfigured: true
+  show_filtered: false
+  show_options: true
+  show_missing: true
+  show_missing_assets: false
+  save_report: false
+  tvdb_language: eng
+  ignore_ids:
+  ignore_imdb_ids:
+  item_refresh_delay: 0
+  playlist_sync_to_users: all
+  playlist_exclude_users:
+  playlist_report: false
+  verify_ssl: true
+  custom_repo:
+  overlay_artwork_filetype: jpg
+  overlay_artwork_quality: 75
+  show_unfiltered: false
+webhooks:
+  error:
+  version:
+  run_start:
+  run_end:
+  changes:
+  delete:
+plex:
+  url: http://<<IP_ADDRESS>>:32400
+  token: <<PLEX_TOKEN>>
+  timeout: 60
+  verify_ssl:
+  db_cache:
+  clean_bundles: false
+  empty_trash: false
+  optimize: false
+tmdb:
+  apikey: <<TMDB_API_KEY>>
+  language: en
+  cache_expiration: 60
+  region:
+radarr:
+  url: http://<<IP_ADDRESS>>:7878
+  token: <<RADARR_API_KEY>>
+  add_missing: false
+  add_existing: false
+  upgrade_existing: false
+  monitor_existing: true
+  root_folder_path: /data/media/movies
+  monitor: true
+  availability: announced
+  quality_profile: HD-1080p
+  search: true
+  ignore_cache: false
+  tag:
+  radarr_path:
+  plex_path:
