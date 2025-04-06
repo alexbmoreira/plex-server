@@ -13,9 +13,9 @@ services:
       - OPENVPN_USERNAME=${VPN_USERNAME}
       - OPENVPN_PASSWORD=${VPN_PASSWORD}
       - LOCAL_NETWORK=10.88.111.0/24
-      - PUID=1000
-      - PGID=1000
-      - TZ="America/Toronto"
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
     volumes:
       - ${PLEX}/vpn/config:/config
       - ${PLEX}/vpn/data:/data
@@ -25,9 +25,9 @@ services:
       - 8989:8989     # Sonarr Web UI
       - 6767:6767     # Bazarr Web UI
       - 9696:9696     # Prowlarr Web UI
-      - 5055:5055     # Overseerr Web UI
+      - 8787:8787     # Readarr Web UI
+      - 8191:8191     # Byparr (Flaresolverr clone)
       - 8112:8112     # Deluge Web UI
-      - 8181:8181     # Tautulli Web UI
       - 6881:6881     # Deluge TCP port
       - 6881:6881/udp # Deluge UDP port
     restart: unless-stopped
@@ -36,9 +36,9 @@ services:
     container_name: plex
     network_mode: host
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ="America/Toronto"
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
       - VERSION=docker
     volumes:
       - ${PLEX}/config:/config
@@ -63,9 +63,9 @@ services:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ="America/Toronto"
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
     volumes:
       - ${PLEX}/radarr/data:/config
       - ${PLEX}/data:/data
@@ -77,9 +77,9 @@ services:
     image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ="America/Toronto"
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
     volumes:
       - ${PLEX}/sonarr/data:/config
       - ${PLEX}/data:/data
@@ -91,9 +91,9 @@ services:
     image: lscr.io/linuxserver/bazarr:latest
     container_name: bazarr
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Toronto
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
     volumes:
       - ${PLEX}/bazarr/data:/config
       - ${PLEX}/data:/data
@@ -105,11 +105,18 @@ services:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ="America/Toronto"
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
     volumes:
       - ${PLEX}/prowlarr/data:/config
+    network_mode: service:vpn
+    depends_on:
+      - vpn
+    restart: unless-stopped
+  byparr:
+    container_name: byparr
+    image: ghcr.io/thephaseless/byparr
     network_mode: service:vpn
     depends_on:
       - vpn
@@ -119,19 +126,18 @@ services:
     container_name: overseerr
     environment:
       - TZ="America/Toronto"
+    ports:
+      - 5055:5055
     volumes:
       - ${PLEX}/overseerr/data:/app/config
-    network_mode: service:vpn
-    depends_on:
-      - vpn
     restart: unless-stopped
   deluge:
     image: lscr.io/linuxserver/deluge:latest
     container_name: deluge
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ="America/Toronto"
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
     volumes:
       - ${PLEX}/deluge/config:/config
       - ${PLEX}/data/torrents:/data/torrents
@@ -153,21 +159,20 @@ services:
     container_name: tautulli
     volumes:
       - ${PLEX}/tautulli/data:/config
+    ports:
+      - 8181:8181
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Toronto
-    network_mode: service:vpn
-    depends_on:
-      - vpn
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
     restart: unless-stopped
   ersatztv:
     image: jasongdove/ersatztv
     container_name: ersatztv
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ="America/Chicago"
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
     ports:
       - 8409:8409
     volumes:
