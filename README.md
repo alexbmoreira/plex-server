@@ -3,13 +3,17 @@
 A (close to) plug-and-play Plex setup using Docker that includes:
 
 - **Plex**
-- **Radarr**, **Sonarr**, **Bazarr**, and **Prowlarr** for indexing torrents
+- **Prowlarr** for indexing torrents
+- **Radarr** for movies and **Sonarr** for TV shows
+- **Bazarr** for subtitles
 - **Deluge** as a download client
 - **PIA vpn** in which the above services will run
 - **Overseerr** for adding movies and TV
 - **Kometa** for managing Plex collections
 - **Cloudflare** tunnels for remote access
 - **Tautilli** for monitoring and notifications
+- **ErsatzTV** for live channels based on things in your library
+- **Wizarr** for onboarding new users to your Plex server
 - A custom status page build with **Express/Node** to monitor and restart your services
 
 As well as a custom ticketing system built with Flask and React that will allow for scheduling movies to be played automatically at a selected time, plus printing tickets with seat numbers.

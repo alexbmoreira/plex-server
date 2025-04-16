@@ -21,12 +21,6 @@ services:
       - ${PLEX}/vpn/data:/data
     ports:
       - 9091:9091     # Transmission Web UI
-      - 7878:7878     # Radarr Web UI
-      - 8989:8989     # Sonarr Web UI
-      - 6767:6767     # Bazarr Web UI
-      - 9696:9696     # Prowlarr Web UI
-      - 8787:8787     # Readarr Web UI
-      - 8191:8191     # Byparr (Flaresolverr clone)
       - 8112:8112     # Deluge Web UI
       - 6881:6881     # Deluge TCP port
       - 6881:6881/udp # Deluge UDP port
@@ -69,9 +63,8 @@ services:
     volumes:
       - ${PLEX}/radarr/data:/config
       - ${PLEX}/data:/data
-    network_mode: service:vpn
-    depends_on:
-      - vpn
+    ports:
+      - 7878:7878
     restart: unless-stopped
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
@@ -83,9 +76,8 @@ services:
     volumes:
       - ${PLEX}/sonarr/data:/config
       - ${PLEX}/data:/data
-    network_mode: service:vpn
-    depends_on:
-      - vpn
+    ports:
+      - 8989:8989
     restart: unless-stopped
   bazarr:
     image: lscr.io/linuxserver/bazarr:latest
@@ -97,9 +89,8 @@ services:
     volumes:
       - ${PLEX}/bazarr/data:/config
       - ${PLEX}/data:/data
-    network_mode: service:vpn
-    depends_on:
-      - vpn
+    ports:
+      - 6767:6767
     restart: unless-stopped
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
@@ -110,16 +101,14 @@ services:
       - TZ=${TZ}
     volumes:
       - ${PLEX}/prowlarr/data:/config
-    network_mode: service:vpn
-    depends_on:
-      - vpn
+    ports:
+      - 9696:9696
     restart: unless-stopped
   byparr:
     container_name: byparr
     image: ghcr.io/thephaseless/byparr
-    network_mode: service:vpn
-    depends_on:
-      - vpn
+    ports:
+      - 8191:8191
     restart: unless-stopped
   overseerr:
     image: sctx/overseerr:latest
