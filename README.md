@@ -15,5 +15,5 @@ A (close to) plug-and-play Plex setup using Docker that includes:
 - **ErsatzTV** for live channels based on things in your library
 - **Wizarr** for onboarding new users to your Plex server
 - A custom status page build with **Express/Node** to monitor and restart your services
+- A custom ticketing system built with **Flask** and **React** for scheduling movies to be played at a selected time, plus printing tickets with seat numbers.
 
-As well as a custom ticketing system built with Flask and React that will allow for scheduling movies to be played automatically at a selected time, plus printing tickets with seat numbers.
