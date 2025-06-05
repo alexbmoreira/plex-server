@@ -10,15 +10,6 @@ collections:
             - Pascale Watchlist
             - Alex Watchlist
     radarr_add_missing: true
-  # "🍂 Fall":
-  #   letterboxd_list:
-  #     - https://letterboxd.com/alexbmoreira/list/fall-movies/
-  #   sync_mode: sync
-  #   schedule: range(9/13-11/15)
-  #   visible_library: true 
-  #   visible_home: true 
-  #   visible_shared: true 
-  #   radarr_add_missing: true
   Stoner Movies:
     letterboxd_list: https://letterboxd.com/buttholesurfer/list/under-the-influence-best-films-to-watch-high/
     sync_mode: sync
@@ -48,17 +39,6 @@ collections:
     collection_order: custom
     sync_mode: sync
     radarr_add_missing: true
-  # Watch Alone:
-  #   plex_all: true
-  #   smart_label:
-  #     all:
-  #       label: <<smart_label>>
-  #       unplayed: true
-  #       label.not: Watchparty!
-  #       any:
-  #         collection.not:
-  #           - Pascale Watchlist
-  #           - Alex Watchlist
   "90 Minutes or Less":
     plex_all: true
     smart_label:

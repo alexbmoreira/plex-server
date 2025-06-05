@@ -109,8 +109,8 @@ webhooks:
   changes:
   delete:
 plex:
-  url: http://<<IP_ADDRESS>>:32400
-  token: <<PLEX_TOKEN>>
+  url: http://<<IPADDRESS>>:32400
+  token: <<PLEXTOKEN>>
   timeout: 60
   verify_ssl:
   db_cache:
@@ -118,13 +118,13 @@ plex:
   empty_trash: false
   optimize: false
 tmdb:
-  apikey: <<TMDB_API_KEY>>
+  apikey: <<TMDBKEY>>
   language: en
   cache_expiration: 60
   region:
 radarr:
-  url: http://<<IP_ADDRESS>>:7878
-  token: <<RADARR_API_KEY>>
+  url: http://<<IPADDRESS>>:7878
+  token: <<RADARRKEY>>
   add_missing: false
   add_existing: false
   upgrade_existing: false

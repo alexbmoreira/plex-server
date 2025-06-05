@@ -9,7 +9,7 @@ services:
       - /dev/net/tun
     environment:
       - OPENVPN_PROVIDER=PIA
-      - OPENVPN_CONFIG=ca_montreal
+      - OPENVPN_CONFIG=ca_toronto
       - OPENVPN_USERNAME=${VPN_USERNAME}
       - OPENVPN_PASSWORD=${VPN_PASSWORD}
       - LOCAL_NETWORK=10.88.111.0/24
@@ -42,14 +42,14 @@ services:
     image: kometateam/kometa:nightly
     container_name: kometa
     environment:
-      - TZ="America/Toronto"
+      - TZ=${TZ}
       - KOMETA_RUN=false
       - KOMETA_TIMES=00:00,02:00,06:30,17:00,19:00,20:00
       - KOMETA_CONFIG=/config/config.yml
-      - KOMETA_IP_ADDRESS=${IP_ADDRESS}
-      - KOMETA_PLEX_TOKEN=${PLEX_TOKEN}
-      - KOMETA_TMDB_API_KEY=${TMDB_API_KEY}
-      - KOMETA_RADARR_API_KEY=${RADARR_API_KEY}
+      - KOMETA_IPADDRESS=${IP_ADDRESS}
+      - KOMETA_PLEXTOKEN=${PLEX_TOKEN}
+      - KOMETA_TMDBKEY=${TMDB_API_KEY}
+      - KOMETA_RADARRKEY=${RADARR_API_KEY}
     volumes:
       - ${PLEX}/kometa/config:/config
     restart: unless-stopped
