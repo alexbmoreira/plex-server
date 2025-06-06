@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from ..app.models import Server
+from ..app.models import PlexConnection
 import os
 from flask_apscheduler import APScheduler
 from dateutil import parser
@@ -30,14 +30,13 @@ scheduler.init_app(app)
 scheduler.start()
 
 def start_movie(movie):
-    cec_power_on(app.config['TV_ADDRESS'], app.config['TV_USERNAME'], app.config['TV_PASSWORD'])
     play_on_chromecast(movie, app.config['CLIENT_NAME'])
 
 @app.route('/api/movies', methods=['GET'])
 def list_movies():
     search = request.args.get('filter[search]')
 
-    plex = Server(app.config['PLEX_URL'], app.config['PLEX_TOKEN'])
+    plex = PlexConnection(app.config['PLEX_URL'], app.config['PLEX_TOKEN'])
     all_movies = plex.list_movies(search)
 
     return jsonify({
@@ -52,7 +51,7 @@ def list_movies():
 
 @app.route('/api/movies/<guid>', methods=['GET'])
 def get_movie(guid):
-    movie = Server(app.config['PLEX_URL'], app.config['PLEX_TOKEN']).find_movie(guid)
+    movie = PlexConnection(app.config['PLEX_URL'], app.config['PLEX_TOKEN']).find_movie(guid)
     return jsonify({
         'data': movie.to_dict()
     })
@@ -62,7 +61,7 @@ def play_movie(guid):
     data = request.get_json()
     seats = data['seats']
     time = parser.parse(data['time'])
-    movie = Server(app.config['PLEX_URL'], app.config['PLEX_TOKEN']).find_movie(guid)
+    movie = PlexConnection(app.config['PLEX_URL'], app.config['PLEX_TOKEN']).find_movie(guid)
 
     print_tickets(movie, seats, time)
     scheduler.add_job(
@@ -70,7 +69,7 @@ def play_movie(guid):
         func=start_movie,
         trigger='date',
         run_date=time,
-        args=[guid]
+        args=[movie.plex_object]
     )
 
     return jsonify({

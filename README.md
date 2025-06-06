@@ -7,7 +7,7 @@ A (close to) plug-and-play Plex setup using Docker that includes:
 - **Radarr** for movies and **Sonarr** for TV shows
 - **Bazarr** for subtitles
 - **Deluge** as a download client
-- **PIA vpn** in which the above services will run
+- **PIA VPN** in for Deluge
 - **Overseerr** for adding movies and TV
 - **Kometa** for managing Plex collections
 - **Cloudflare** tunnels for remote access
