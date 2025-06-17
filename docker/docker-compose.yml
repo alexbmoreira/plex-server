@@ -8,15 +8,16 @@ services:
     devices:
       - /dev/net/tun
     environment:
-      - OPENVPN_PROVIDER=PIA
-      - OPENVPN_CONFIG=ca_toronto
-      - OPENVPN_USERNAME=${VPN_USERNAME}
-      - OPENVPN_PASSWORD=${VPN_PASSWORD}
-      - LOCAL_NETWORK=10.88.111.0/24
+      - OPENVPN_PROVIDER=custom
+      - OPENVPN_CONFIG=ca.protonvpn.udp
+      - OPENVPN_USERNAME=${OPENVPN_USERNAME}
+      - OPENVPN_PASSWORD=${OPENVPN_PASSWORD}
+      - LOCAL_NETWORK=${IP_SUBNET}
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
+      - ${PLEX}/protonvpn:/etc/openvpn/custom
       - ${PLEX}/vpn/config:/config
       - ${PLEX}/vpn/data:/data
     ports:
@@ -24,6 +25,20 @@ services:
       - 8112:8112     # Deluge Web UI
       - 6881:6881     # Deluge TCP port
       - 6881:6881/udp # Deluge UDP port
+    restart: unless-stopped
+  deluge:
+    image: lscr.io/linuxserver/deluge:latest
+    container_name: deluge
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${PLEX}/deluge/config:/config
+      - ${PLEX}/data/torrents:/data/torrents
+    network_mode: service:vpn
+    depends_on:
+      - vpn
     restart: unless-stopped
   plex:
     image: lscr.io/linuxserver/plex:latest
@@ -119,20 +134,6 @@ services:
       - 5055:5055
     volumes:
       - ${PLEX}/overseerr/data:/app/config
-    restart: unless-stopped
-  deluge:
-    image: lscr.io/linuxserver/deluge:latest
-    container_name: deluge
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-    volumes:
-      - ${PLEX}/deluge/config:/config
-      - ${PLEX}/data/torrents:/data/torrents
-    network_mode: service:vpn
-    depends_on:
-      - vpn
     restart: unless-stopped
   cloudflared:
     image: cloudflare/cloudflared:latest
