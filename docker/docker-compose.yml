@@ -171,37 +171,13 @@ services:
     restart: unless-stopped
   ticketing:
     container_name: ticketing
-    build:
-      context: ${PLEX}/ticketing/client
-      dockerfile: ${PLEX}/docker/Dockerfile.react
-    ports:
-      - 3000:3000
-    volumes:
-      - ${PLEX}/ticketing/client:/app
-      - /app/node_modules
+    image: docker.io/alexbmoreira/plex-home-theatre
     environment:
-      - CHOKIDAR_USEPOLLING=true
-    user: node
-    restart: unless-stopped
-  ticketing-api:
-    container_name: ticketing-api
-    build:
-      context: ${PLEX}/ticketing
-      dockerfile: ${PLEX}/docker/Dockerfile.flask
-    network_mode: host
-    environment:
-      - IP_ADDRESS=${IP_ADDRESS}
       - PLEX_TOKEN=${PLEX_TOKEN}
       - PLEX_URL=${PLEX_URL}
       - CLIENT_NAME=${CLIENT_NAME}
-      - TV_ADDRESS=${TV_ADDRESS}
-      - TV_USERNAME=${TV_USERNAME}
-      - TV_PASSWORD=${TV_PASSWORD}
-      - PLEX_TICKETING_ORIGINS=${PLEX_TICKETING_ORIGINS}
     ports:
-      - 5000:5000
-    volumes:
-      - ${PLEX}/ticketing:/app
+      - 5067:5067
     restart: unless-stopped
   status:
     container_name: status
