@@ -171,7 +171,7 @@ services:
     restart: unless-stopped
   ticketing:
     container_name: ticketing
-    image: docker.io/alexbmoreira/plex-home-theatre
+    image: docker.io/alexbmoreira/plex-home-theatre:latest
     environment:
       - PLEX_TOKEN=${PLEX_TOKEN}
       - PLEX_URL=${PLEX_URL}
