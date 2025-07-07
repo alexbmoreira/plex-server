@@ -179,28 +179,6 @@ services:
     ports:
       - 5067:5067
     restart: unless-stopped
-  status:
-    container_name: status
-    build:
-      context: ${PLEX}/status
-      dockerfile: ${PLEX}/docker/Dockerfile.node
-    network_mode: host
-    ports:
-      - 8080:8080
-    volumes:
-      - ${PLEX}/status:/app
-      - /app/node_modules
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ${PLEX}/docker/docker-compose.yml:/docker/docker-compose.yml:ro
-    environment:
-      - IP_ADDRESS=${IP_ADDRESS}
-      - AUTH_HASH=${STATUS_AUTH_HASH}
-      - AUTH_KEY=${STATUS_AUTH_KEY}
-      - PLEX_TOKEN=${PLEX_TOKEN}
-      - RADARR_API_KEY=${RADARR_API_KEY}
-      - SONARR_API_KEY=${SONARR_API_KEY}
-      - PROWLARR_API_KEY=${PROWLARR_API_KEY}
-    restart: unless-stopped
   wizarr:
     container_name: wizarr
     image: ghcr.io/wizarrrr/wizarr:latest
