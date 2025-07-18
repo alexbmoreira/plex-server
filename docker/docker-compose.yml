@@ -8,15 +8,16 @@ services:
     devices:
       - /dev/net/tun
     environment:
-      - OPENVPN_PROVIDER=PIA
-      - OPENVPN_CONFIG=ca_toronto
-      - OPENVPN_USERNAME=${VPN_USERNAME}
-      - OPENVPN_PASSWORD=${VPN_PASSWORD}
-      - LOCAL_NETWORK=10.88.111.0/24
+      - OPENVPN_PROVIDER=custom
+      - OPENVPN_CONFIG=ca.protonvpn.udp
+      - OPENVPN_USERNAME=${OPENVPN_USERNAME}
+      - OPENVPN_PASSWORD=${OPENVPN_PASSWORD}
+      - LOCAL_NETWORK=${IP_SUBNET}
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
+      - ${PLEX}/protonvpn:/etc/openvpn/custom
       - ${PLEX}/vpn/config:/config
       - ${PLEX}/vpn/data:/data
     ports:
@@ -24,6 +25,20 @@ services:
       - 8112:8112     # Deluge Web UI
       - 6881:6881     # Deluge TCP port
       - 6881:6881/udp # Deluge UDP port
+    restart: unless-stopped
+  deluge:
+    image: lscr.io/linuxserver/deluge:latest
+    container_name: deluge
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${PLEX}/deluge/config:/config
+      - ${PLEX}/data/torrents:/data/torrents
+    network_mode: service:vpn
+    depends_on:
+      - vpn
     restart: unless-stopped
   plex:
     image: lscr.io/linuxserver/plex:latest
@@ -120,20 +135,6 @@ services:
     volumes:
       - ${PLEX}/overseerr/data:/app/config
     restart: unless-stopped
-  deluge:
-    image: lscr.io/linuxserver/deluge:latest
-    container_name: deluge
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
-    volumes:
-      - ${PLEX}/deluge/config:/config
-      - ${PLEX}/data/torrents:/data/torrents
-    network_mode: service:vpn
-    depends_on:
-      - vpn
-    restart: unless-stopped
   cloudflared:
     image: cloudflare/cloudflared:latest
     container_name: cloudflared
@@ -170,59 +171,13 @@ services:
     restart: unless-stopped
   ticketing:
     container_name: ticketing
-    build:
-      context: ${PLEX}/ticketing/client
-      dockerfile: ${PLEX}/docker/Dockerfile.react
-    ports:
-      - 3000:3000
-    volumes:
-      - ${PLEX}/ticketing/client:/app
-      - /app/node_modules
+    image: docker.io/alexbmoreira/plex-home-theatre:latest
     environment:
-      - CHOKIDAR_USEPOLLING=true
-    user: node
-    restart: unless-stopped
-  ticketing-api:
-    container_name: ticketing-api
-    build:
-      context: ${PLEX}/ticketing
-      dockerfile: ${PLEX}/docker/Dockerfile.flask
-    network_mode: host
-    environment:
-      - IP_ADDRESS=${IP_ADDRESS}
       - PLEX_TOKEN=${PLEX_TOKEN}
       - PLEX_URL=${PLEX_URL}
       - CLIENT_NAME=${CLIENT_NAME}
-      - TV_ADDRESS=${TV_ADDRESS}
-      - TV_USERNAME=${TV_USERNAME}
-      - TV_PASSWORD=${TV_PASSWORD}
-      - PLEX_TICKETING_ORIGINS=${PLEX_TICKETING_ORIGINS}
     ports:
-      - 5000:5000
-    volumes:
-      - ${PLEX}/ticketing:/app
-    restart: unless-stopped
-  status:
-    container_name: status
-    build:
-      context: ${PLEX}/status
-      dockerfile: ${PLEX}/docker/Dockerfile.node
-    network_mode: host
-    ports:
-      - 8080:8080
-    volumes:
-      - ${PLEX}/status:/app
-      - /app/node_modules
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ${PLEX}/docker/docker-compose.yml:/docker/docker-compose.yml:ro
-    environment:
-      - IP_ADDRESS=${IP_ADDRESS}
-      - AUTH_HASH=${STATUS_AUTH_HASH}
-      - AUTH_KEY=${STATUS_AUTH_KEY}
-      - PLEX_TOKEN=${PLEX_TOKEN}
-      - RADARR_API_KEY=${RADARR_API_KEY}
-      - SONARR_API_KEY=${SONARR_API_KEY}
-      - PROWLARR_API_KEY=${PROWLARR_API_KEY}
+      - 5067:5067
     restart: unless-stopped
   wizarr:
     container_name: wizarr

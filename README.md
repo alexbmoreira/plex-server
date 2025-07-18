@@ -7,15 +7,14 @@ A (close to) plug-and-play Plex setup using Docker that includes:
 - **Radarr** for movies and **Sonarr** for TV shows
 - **Bazarr** for subtitles
 - **Deluge** as a download client
-- **PIA VPN** in for Deluge
+- **ProtonVPN** for Deluge
 - **Overseerr** for adding movies and TV
 - **Kometa** for managing Plex collections
 - **Cloudflare** tunnels for remote access
 - **Tautilli** for monitoring and notifications
 - **ErsatzTV** for live channels based on things in your library
 - **Wizarr** for onboarding new users to your Plex server
-- A custom status page built with **Express/Node** to monitor and restart your services
-- A custom ticketing system built with **Flask** and **React** for scheduling movies to be played at a selected time, plus printing tickets with seat numbers.
+- My own **[Plex Home Theatre](https://github.com/alexbmoreira/plex-home-theatre)** for scheduling movies to be played at a selected time, plus printing tickets with seat numbers.
 
 This guide will walk through basic setup for each app, but won't go beyond basic configuration. The docs linked above for each app do a great job at walking you though how they work in much more detail than I ever could. Each section will walk through setting up each app. You can stop after installing Plex on it's own, or you can run though the full suite of apps and supercharge your server, but you should be able to run anything independently of one another (With some exceptions, download client will rely on a VPN, etc.).
 

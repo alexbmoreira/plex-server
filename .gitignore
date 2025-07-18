@@ -9,10 +9,13 @@ deluge/
 ersatztv/
 !kometa/config/
 overseerr/
+protonvpn/
 prowlarr/
 radarr/
 sonarr/
+status/
 tautulli/
+ticketing/
 vpn/
 wizarr/
 
