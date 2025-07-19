@@ -21,7 +21,6 @@ services:
       - ${PLEX}/vpn/config:/config
       - ${PLEX}/vpn/data:/data
     ports:
-      - 9091:9091     # Transmission Web UI
       - 8112:8112     # Deluge Web UI
       - 6881:6881     # Deluge TCP port
       - 6881:6881/udp # Deluge UDP port
