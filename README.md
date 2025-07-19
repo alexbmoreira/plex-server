@@ -129,6 +129,59 @@ Then add Gluetun to your `docker-compose.yml`:
     restart: unless-stopped
 ```
 
+## Deluge
+
+Most setup happens within the browser UI itself. You can use any torrent client you like, they'll probably all be relatively similar in terms of setup.
+
+Start by adding the directory for your torrents. Make sure this is on the same physical drive as your movies and shows (In this case, `~/plex/data`) in order for hardlinking to work with Radarr and Sonarr.
+
+```bash
+mkdir -p ~/plex/data/torrents
+```
+
+Add the Deluge service to Docker:
+
+```yaml
+  deluge:
+    image: lscr.io/linuxserver/deluge:latest
+    container_name: deluge
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${HOME}/plex/deluge/config:/config
+      - ${HOME}/plex/data/torrents:/data/torrents
+    network_mode: service:vpn
+    depends_on:
+      - vpn
     restart: unless-stopped
 ```
+
+Then expose Deluge’s ports in your VPN service:
+
+```yaml
+  vpn:
+    # ...
+    ports:
+      - 8112:8112
+      - 6881:6881
+      - 6881:6881/udp
+```
+
+Open the web UI at port 8112 and log in with:
+```
+Username: admin
+Password: deluge
+```
+
+Change the password, then go to Preferences and update the following:
+
+**Network:** Set incoming port to 6881 (otherwise Deluge will randomize it)
+
+**Downloads**: Set "Download to" as /data/torrents
+
+**Plugins:** Enable Label
+
+We'll revisit Deluge settings later as we add Radarr and Sonarr.
 
