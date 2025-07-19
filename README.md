@@ -92,4 +92,43 @@ services:
 
 If you're only running Plex and plan to add media manually, you can stop here. Just open Plex in your browser at port 32400 and set up your libraries to start watching.
 
+## VPN (ProtonVPN)
+
+There are a few things to consider with VPN setup — port forwarding, WireGuard vs OpenVPN, etc. I won’t get into all of it because, frankly, I don’t fully understand it all myself. I use ProtonVPN with OpenVPN, and it works well for me.
+
+WireGuard is generally preferred for performance, but I only get a few KB/s with it for some reason and need to figure that out, so I stick with OpenVPN in the meantime. Use whatever works best for you.
+
+Add your OpenVPN credentials to your `.env`:
+
+```bash
+OPENVPN_USERNAME="yourusername"
+OPENVPN_PASSWORD="yourpassword"
+```
+
+Then add Gluetun to your `docker-compose.yml`:
+
+```yaml
+  vpn:
+    image: qmcgaw/gluetun
+    container_name: vpn
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    environment:
+      - VPN_SERVICE_PROVIDER=protonvpn
+      - VPN_TYPE=openvpn
+      - OPENVPN_USER=${OPENVPN_USERNAME}
+      - OPENVPN_PASSWORD=${OPENVPN_PASSWORD}
+      - SERVER_COUNTRIES=Canada
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${HOME}/plex/vpn:/vpn
+    restart: unless-stopped
+```
+
+    restart: unless-stopped
+```
 
