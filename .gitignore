@@ -1,5 +1,6 @@
 **/.env
 **/.DS_Store
+**/node_modules
 
 bazarr/
 cloudflared/
@@ -18,5 +19,3 @@ tautulli/
 ticketing/
 vpn/
 wizarr/
-
-**/node_modules
