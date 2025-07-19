@@ -185,3 +185,28 @@ Change the password, then go to Preferences and update the following:
 
 We'll revisit Deluge settings later as we add Radarr and Sonarr.
 
+## Prowlarr
+
+Prowlarr is used to manage torrent trackers for Radarr and Sonarr.
+
+Add Prowlarr to your `docker-compose.yml`:
+
+```yaml
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${HOME}/plex/prowlarr/data:/config
+    ports:
+      - 9696:9696
+    restart: unless-stopped
+```
+
+Once it's running, open the web UI at port 9696 and start adding your preferred torrent sites under Indexers.
+
+There's nothing else to set up here until Radarr and Sonarr are running. Once those are set up, they can be linked through **Settings** > **Apps** in Prowlarr.
+
