@@ -11,7 +11,7 @@ A (close to) plug-and-play Plex setup using Docker that includes:
 - **[Kometa](https://kometa.wiki/en/latest/)** for managing Plex collections
 - **[Bazarr](https://wiki.bazarr.media/)** for subtitles
 - **[Cloudflare](https://www.cloudflare.com/en-ca/)** tunnels for remote access
-- **[Tautilli](https://tautulli.com/)** for monitoring and notifications
+- **[Tautulli](https://tautulli.com/)** for monitoring and notifications
 - **[ErsatzTV](https://ersatztv.org/)** for live channels based on things in your library
 - **[Wizarr](https://wizarr.org/docs/overview/introduction)** for onboarding new users to your Plex server
 - My own **[Plex Home Theatre](https://github.com/alexbmoreira/plex-home-theatre)** for scheduling movies to be played at a selected time, plus printing tickets with seat numbers (_Work in Progress_).
@@ -355,3 +355,27 @@ If you want to know what Kometa can do, here's some of what I use it for current
 - Build seasonal collections (e.g. Halloween, Christmas), then auto-remove them after the season to keep my collections less cluttered.
 - Create a collection in Plex that has all the movies that are in my Letterboxd watchlist.
 - Pull new additions from my Letterboxd watchlist and send them to Radarr to be automatically downloaded.
+
+## Other tools
+
+Some complementary tools I won't cover in full detail:
+
+### Bazarr
+
+Bazarr integrates with Radarr and Sonarr to automatically download and manage subtitles for your media. Setup is simple, and the app will automatically download, sort, and rename subtitle files for any movie or show you add to your collection.
+
+### Cloudflare
+
+Cloudflare tunnels are my choice for remote access. I use the [cloudflared docker image](https://hub.docker.com/r/cloudflare/cloudflared) and set up a tunnel for all my apps.
+
+### Tautulli
+
+Tautulli is an app used to monitor usage of your server. Who's streaming and when, whether or not your server is transcoding, etc. I also use it to notify me when new content is added to my library, so I never miss a release.
+
+### ErsatzTV
+
+ErsatzTV lets me create an IPTV server with my library. I don't use it a ton, but there are some really cool uses for it if you're willing to put in the setup work.
+
+### Wizarr
+
+Wizarr is used to invite people to your Plex library. It allows you to create a custom onboarding flow that walks new users through signing up for Plex, joining your library, and linking their account to Overseerr to request movies.
