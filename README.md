@@ -275,7 +275,7 @@ Simply install Overseerr with Docker:
     ports:
       - 5055:5055
     volumes:
-      - ${PLEX}/overseerr/data:/app/config
+      - ${HOME}/plex/overseerr/data:/app/config
     restart: unless-stopped
 ```
 
@@ -294,8 +294,8 @@ Sonarr manages TV shows the same way Radarr handles movies. The setup and config
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${PLEX}/sonarr/data:/config
-      - ${PLEX}/data:/data
+      - ${HOME}/plex/sonarr/data:/config
+      - ${HOME}/plex/data:/data
     ports:
       - 8989:8989
     restart: unless-stopped
@@ -309,3 +309,49 @@ Once running, open the web UI at port 8989 and configure it just like Radarr:
 - Link Sonarr to Prowlarr under Settings > Apps in Prowlarr
 
 Check out the [Radarr section](#radarr) for detailed steps.
+
+## Kometa
+
+Kometa (formerly PMM) automates Plex metadata using YAML configs. You can use it to build collections, set posters and backgrounds, pull from IMDb or Letterboxd lists, and add movies to Radarr.
+
+My config files are available in this repo, but I'd recommend starting from scratch and following the [Kometa docs](https://kometa.wiki/en/latest/) to build something that works for you.
+
+Start by adding the following to your `.env`:
+
+```bash
+IP_ADDRESS="localserverip"
+PLEX_TOKEN="yourtoken"
+TMDB_API_KEY="tmdbkey"
+RADARR_API_KEY="radarrkey"
+```
+> The Radarr API key is only needed if you want to integrate Kometa with Radarr.
+
+Next, add the service to Docker:
+
+```yaml
+  kometa:
+    image: kometateam/kometa:nightly
+    container_name: kometa
+    environment:
+      - TZ=${TZ}
+      - KOMETA_RUN=false
+      - KOMETA_TIMES=00:00,02:00,06:30,17:00,19:00,20:00
+      - KOMETA_CONFIG=/config/config.yml
+      - KOMETA_IPADDRESS=${IP_ADDRESS}
+      - KOMETA_PLEXTOKEN=${PLEX_TOKEN}
+      - KOMETA_TMDBKEY=${TMDB_API_KEY}
+      - KOMETA_RADARRKEY=${RADARR_API_KEY}
+    volumes:
+      - ${HOME}/plex/kometa/config:/config
+    restart: unless-stopped
+```
+> Note: Environment variable names must not use underscores (PLEXTOKEN, not PLEX_TOKEN). It's weird, but underscores may prevent Kometa from reading them due to this [issue](https://github.com/Kometa-Team/Kometa/issues/2197#issuecomment-2476939655).
+
+Before running Kometa, you’ll need to create your `~/plex/kometa/config` files. The docs explain this well, so I won’t go into detail here.
+
+If you want to know what Kometa can do, here's some of what I use it for currently:
+
+- Sort movies by a certain actor/director into their own collection, with a custom poster.
+- Build seasonal collections (e.g. Halloween, Christmas), then auto-remove them after the season to keep my collections less cluttered.
+- Create a collection in Plex that has all the movies that are in my Letterboxd watchlist.
+- Pull new additions from my Letterboxd watchlist and send them to Radarr to be automatically downloaded.
