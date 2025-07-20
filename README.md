@@ -177,11 +177,14 @@ Password: deluge
 
 Change the password, then go to Preferences and update the following:
 
-**Network:** Set incoming port to 6881 (otherwise Deluge will randomize it)
+**Network**
+- Set incoming port to 6881 (otherwise Deluge will randomize it)
 
-**Downloads**: Set "Download to" as /data/torrents
+**Downloads**
+- Set "Download to" as /data/torrents
 
-**Plugins:** Enable Label
+**Plugins**
+- Enable Label
 
 We'll revisit Deluge settings later as we add Radarr and Sonarr.
 
@@ -209,4 +212,52 @@ Add Prowlarr to your `docker-compose.yml`:
 Once it's running, open the web UI at port 9696 and start adding your preferred torrent sites under Indexers.
 
 There's nothing else to set up here until Radarr and Sonarr are running. Once those are set up, they can be linked through **Settings** > **Apps** in Prowlarr.
+
+## Radarr
+
+Radarr manages your movie library. It monitors RSS feeds, connects to your indexers and torrent client, and handles downloads and sorting automatically.
+
+Start by adding Radarr to Docker:
+
+```yaml
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${HOME}/plex/radarr/data:/config
+      - ${HOME}/plex/data:/data
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+```
+
+Once Radarr is up and running, access the web UI at port 7878 and change the folowing settings:
+
+**Media Management**
+- Add a root folder: /data/media/movies
+
+**Profiles**
+- Create a quality profile with the resolutions and formats you want
+- Enable Upgrades Allowed to let Radarr replace lower-quality files with better ones
+
+**Quality**
+- Adjust quality settings to control file size by runtime
+- Use [this guide](https://trash-guides.info/Radarr/Radarr-Quality-Settings-File-Size/#radarr-quality-definitions) as a reference
+
+**Download Clients**
+- Click “+”, choose Deluge
+- Set Host to your server’s IP and enter your Deluge password
+- Test and save the connection
+
+**Connect**
+- Click “+”, choose Plex Media Server
+- Enter your server’s IP and sign in with Plex.tv
+
+**Link to Prowlarr**
+- Once Radarr is fully set up, go to **Settings** > **Apps** in Prowlarr and add it as an app.
+
 
