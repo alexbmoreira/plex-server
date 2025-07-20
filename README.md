@@ -2,19 +2,19 @@
 
 A (close to) plug-and-play Plex setup using Docker that includes:
 
-- **Plex**
-- **ProtonVPN** for Deluge
-- **Deluge** as a download client
-- **Prowlarr** for indexing torrents
-- **Radarr** for movies and **Sonarr** for TV shows
-- **Overseerr** for adding movies and TV
-- **Kometa** for managing Plex collections
-- **Bazarr** for subtitles
-- **Cloudflare** tunnels for remote access
-- **Tautilli** for monitoring and notifications
-- **ErsatzTV** for live channels based on things in your library
-- **Wizarr** for onboarding new users to your Plex server
-- My own **[Plex Home Theatre](https://github.com/alexbmoreira/plex-home-theatre)** for scheduling movies to be played at a selected time, plus printing tickets with seat numbers.
+- **[Plex](https://www.plex.tv/)**
+- **[Deluge](https://hub.docker.com/r/linuxserver/deluge)** as a download client
+- **[ProtonVPN](https://protonvpn.com/)** for Deluge
+- **[Prowlarr](https://wiki.servarr.com/en/prowlarr)** for indexing torrents
+- **[Radarr](https://wiki.servarr.com/en/radarr)** for movies and **[Sonarr](https://wiki.servarr.com/en/sonarr)** for TV shows
+- **[Overseerr](https://overseerr.dev/)** for adding movies and TV
+- **[Kometa](https://kometa.wiki/en/latest/)** for managing Plex collections
+- **[Bazarr](https://wiki.bazarr.media/)** for subtitles
+- **[Cloudflare](https://www.cloudflare.com/en-ca/)** tunnels for remote access
+- **[Tautilli](https://tautulli.com/)** for monitoring and notifications
+- **[ErsatzTV](https://ersatztv.org/)** for live channels based on things in your library
+- **[Wizarr](https://wizarr.org/docs/overview/introduction)** for onboarding new users to your Plex server
+- My own **[Plex Home Theatre](https://github.com/alexbmoreira/plex-home-theatre)** for scheduling movies to be played at a selected time, plus printing tickets with seat numbers (_Work in Progress_).
 
 ## Getting Started
 
