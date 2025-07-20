@@ -260,4 +260,25 @@ Once Radarr is up and running, access the web UI at port 7878 and change the fol
 **Link to Prowlarr**
 - Once Radarr is fully set up, go to **Settings** > **Apps** in Prowlarr and add it as an app.
 
+## Overseerr
+
+Overseerr provides a clean interface for finding and downloading movies and TV through Radarr and Sonarr. It also allows users to make requests movies if you plan on sharing your library.
+
+Simply install Overseerr with Docker:
+
+```yaml
+  overseerr:
+    image: sctx/overseerr:latest
+    container_name: overseerr
+    environment:
+      - TZ="America/Toronto"
+    ports:
+      - 5055:5055
+    volumes:
+      - ${PLEX}/overseerr/data:/app/config
+    restart: unless-stopped
+```
+
+Once running, open the app at port 5055 and complete the initial setup. To allow others to make requests, go to the Users tab and import your Plex users.
+
 
