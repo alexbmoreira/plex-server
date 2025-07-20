@@ -281,4 +281,31 @@ Simply install Overseerr with Docker:
 
 Once running, open the app at port 5055 and complete the initial setup. To allow others to make requests, go to the Users tab and import your Plex users.
 
+## Sonarr
 
+Sonarr manages TV shows the same way Radarr handles movies. The setup and configuration steps are nearly identical.
+
+```yaml
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${PLEX}/sonarr/data:/config
+      - ${PLEX}/data:/data
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+```
+
+Once running, open the web UI at port 8989 and configure it just like Radarr:
+- Add a root folder: /data/media/tv
+- Set up quality profiles and preferred formats
+- Connect Deluge as your download client
+- Add your Plex server under Connect
+- Link Sonarr to Prowlarr under Settings > Apps in Prowlarr
+
+Check out the [Radarr section](#radarr) for detailed steps.
