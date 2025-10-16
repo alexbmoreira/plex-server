@@ -49,6 +49,8 @@ services:
     volumes:
       - ${PLEX}/config:/config
       - ${PLEX}/data/media:/data/media
+    devices:
+      - /dev/dri:/dev/dri
     restart: unless-stopped
   kometa:
     image: kometateam/kometa:nightly
@@ -179,6 +181,10 @@ services:
   wizarr:
     container_name: wizarr
     image: ghcr.io/wizarrrr/wizarr:latest
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
     ports:
       - 5690:5690
     volumes:
