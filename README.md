@@ -87,8 +87,12 @@ services:
     volumes:
       - ${HOME}/plex/config:/config
       - ${HOME}/plex/data/media:/data/media
+    devices:
+      - /dev/dri:/dev/dri
     restart: unless-stopped
 ```
+
+The `/dev/dri` device is needed to allow for hardware transcoding with the iGPU. It may not be needed or may look different if you're using different hardware, but if you stuck with what I recommended above, you'll want to have that line.
 
 If you're only running Plex and plan to add media manually, you can stop here. Just open Plex in your browser at port 32400 and set up your libraries to start watching.
 
