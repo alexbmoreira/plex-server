@@ -189,3 +189,20 @@ services:
       - 5690:5690
     volumes:
       - ${PLEX}/wizarr/database:/data/database
+    restart: unless-stopped
+  arcane:
+    container_name: arcane
+    image: ghcr.io/ofkm/arcane:latest
+    ports:
+      - 3552:3552
+    volumes:
+      - ${PLEX}/arcane/data:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - APP_URL=http://localhost:3552
+      - ENCRYPTION_KEY=${ARCANE_ENCRYPTION_KEY}
+      - JWT_SECRET=${ARCANE_JWT_SECRET}
+    restart: unless-stopped
