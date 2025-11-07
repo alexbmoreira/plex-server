@@ -14,6 +14,7 @@ A (close to) plug-and-play Plex setup using Docker that includes:
 - **[Tautulli](https://tautulli.com/)** for monitoring and notifications
 - **[ErsatzTV](https://ersatztv.org/)** for live channels based on things in your library
 - **[Wizarr](https://wizarr.org/docs/overview/introduction)** for onboarding new users to your Plex server
+- **[Arcane](https://getarcane.app/)** for managing Docker containers
 - My own **[Plex Home Theatre](https://github.com/alexbmoreira/plex-home-theatre)** for scheduling movies to be played at a selected time, plus printing tickets with seat numbers (_Work in Progress_).
 
 ## Getting Started
@@ -383,3 +384,7 @@ ErsatzTV lets me create an IPTV server with my library. I don't use it a ton, bu
 ### Wizarr
 
 Wizarr is used to invite people to your Plex library. It allows you to create a custom onboarding flow that walks new users through signing up for Plex, joining your library, and linking their account to Overseerr to request movies.
+
+### Arcane
+
+Arcane is used to monitor and manage Docker containers. With it I can check the status of everything I'm running and reboot remotely if necessary.
