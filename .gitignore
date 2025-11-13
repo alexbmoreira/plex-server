@@ -4,12 +4,16 @@
 
 arcane/
 bazarr/
+booklore/
+bookloredb/
+bookshelf/
 cloudflared/
 config/
 data/
 deluge/
 ersatztv/
 !kometa/config/
+nginx/
 overseerr/
 protonvpn/
 prowlarr/

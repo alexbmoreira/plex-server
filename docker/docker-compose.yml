@@ -227,3 +227,56 @@ services:
       - ENCRYPTION_KEY=${ARCANE_ENCRYPTION_KEY}
       - JWT_SECRET=${ARCANE_JWT_SECRET}
     restart: unless-stopped
+
+  # eBooks
+
+  booklore:
+    image: booklore/booklore:latest
+    container_name: booklore
+    environment:
+      - USER_ID=${BOOKLORE_USER_ID}
+      - GROUP_ID=${BOOKLORE_GROUP_ID}
+      - TZ=${TZ}
+      - DATABASE_URL=${BOOKLORE_DATABASE_URL}
+      - DATABASE_USERNAME=${BOOKLORE_DB_USER}
+      - DATABASE_PASSWORD=${BOOKLORE_DB_PASSWORD}
+      - BOOKLORE_PORT=${BOOKLORE_PORT}
+    depends_on:
+      bookloredb:
+        condition: service_healthy
+    volumes:
+      - ${PLEX}/booklore/data:/app/data
+      - ${PLEX}/booklore/bookdrop:/bookdrop
+      - ${PLEX}/data:/data
+    restart: unless-stopped
+  nginx-booklore:
+    image: nginx:alpine
+    container_name: nginx-booklore
+    environment:
+      - BOOKLORE_PORT=${BOOKLORE_PORT}
+    volumes:
+      - ${PLEX}/nginx/booklore.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - 8083:80
+    depends_on:
+      - booklore
+    restart: unless-stopped
+  bookloredb:
+    image: lscr.io/linuxserver/mariadb:11.4.5
+    container_name: bookloredb
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - MYSQL_ROOT_PASSWORD=${BOOKLORE_MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${BOOKLORE_MYSQL_DATABASE}
+      - MYSQL_USER=${BOOKLORE_DB_USER}
+      - MYSQL_PASSWORD=${BOOKLORE_DB_PASSWORD}
+    volumes:
+      - ${PLEX}/bookloredb/config:/config
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "mariadb-admin", "ping", "-h", "localhost" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
