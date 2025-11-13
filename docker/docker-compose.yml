@@ -8,34 +8,55 @@ services:
     devices:
       - /dev/net/tun
     environment:
-      - VPN_SERVICE_PROVIDER=protonvpn
-      - VPN_TYPE=openvpn
-      - OPENVPN_USER=${OPENVPN_USERNAME}
-      - OPENVPN_PASSWORD=${OPENVPN_PASSWORD}
-      - SERVER_COUNTRIES=Canada
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
+      - VPN_SERVICE_PROVIDER=protonvpn
+      - VPN_TYPE=wireguard
+      - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY}
+      - SERVER_COUNTRIES=Canada
+      - VPN_PORT_FORWARDING=on
+      - GLUETUN_HTTP_CONTROL_SERVER_ENABLE=on
     volumes:
       - ${PLEX}/vpn:/vpn
     ports:
-      - 8112:8112
       - 6881:6881
       - 6881:6881/udp
+      - 8080:8080
     restart: unless-stopped
-  deluge:
-    image: lscr.io/linuxserver/deluge:latest
-    container_name: deluge
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:5.1.2
+    container_name: qbittorrent
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
+      - WEBUI_PORT=8080
     volumes:
-      - ${PLEX}/deluge/config:/config
+      - ${PLEX}/qbittorrent/config:/config
       - ${PLEX}/data/torrents:/data/torrents
     network_mode: service:vpn
     depends_on:
       - vpn
+    restart: unless-stopped
+  qsticky:
+    image: ghcr.io/monstermuffin/qsticky:latest
+    container_name: qsticky
+    environment:
+      - QBITTORRENT_HOST=vpn
+      - QBITTORRENT_HTTPS=false
+      - QBITTORRENT_PORT=8080
+      - QBITTORRENT_USER=${QBITTORRENT_USER}
+      - QBITTORRENT_PASS=${QBITTORRENT_PASS}
+      - GLUETUN_HOST=vpn
+      - GLUETUN_AUTH_TYPE=apikey
+      - GLUETUN_APIKEY=${GLUETUN_APIKEY}
+      - LOG_LEVEL=INFO
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import json; exit(0 if json.load(open('/app/health/status.json'))['healthy'] else 1)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     restart: unless-stopped
   plex:
     image: lscr.io/linuxserver/plex:latest

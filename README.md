@@ -3,8 +3,8 @@
 A (close to) plug-and-play Plex setup using Docker that includes:
 
 - **[Plex](https://www.plex.tv/)**
-- **[Deluge](https://hub.docker.com/r/linuxserver/deluge)** as a download client
-- **[ProtonVPN](https://protonvpn.com/)** for Deluge
+- **[qBittorrent](https://www.qbittorrent.org/)** as a download client
+- **[ProtonVPN](https://protonvpn.com/)** as a VPN through [Gluetun](https://github.com/qdm12/gluetun)
 - **[Prowlarr](https://wiki.servarr.com/en/prowlarr)** for indexing torrents
 - **[Radarr](https://wiki.servarr.com/en/radarr)** for movies and **[Sonarr](https://wiki.servarr.com/en/sonarr)** for TV shows
 - **[Overseerr](https://overseerr.dev/)** for adding movies and TV
@@ -99,15 +99,44 @@ If you're only running Plex and plan to add media manually, you can stop here. J
 
 ## VPN (ProtonVPN)
 
-There are a few things to consider with VPN setup — port forwarding, WireGuard vs OpenVPN, etc. I won’t get into all of it because, frankly, I don’t fully understand it all myself. I use ProtonVPN with OpenVPN, and it works well for me.
+There are a couple things to consider with your VPN setup. WireGuard vs. OpenVPN, port forwarding, etc. WireGuard is generally preferred for performance, but I've used OpenVPN with no issues before. Port forwarding will depend on your provider's capabilities, which is one of the reasons I picked ProtonVPN.
 
-WireGuard is generally preferred for performance, but I only get a few KB/s with it for some reason and need to figure that out, so I stick with OpenVPN in the meantime. Use whatever works best for you.
+I have a WireGuard setup with port-forwarding through Gluetun. You can stick with OpenVPN if you need a different setup, but I recommend qBittorrent for easy port-forwarding. I'll cover it in more detail in that step.
 
-Add your OpenVPN credentials to your `.env`:
+Start by downloading a WireGuard config file from your VPN website. For ProtonVPN, go to the [downloads page](https://account.protonvpn.com/downloads) for your account, scroll down to WireGruard configuration, and choose the following options:
+
+- **Platform**: GNU/Linux.
+- **NetShield blocker filtering**: Block malware only. Blocking ads and trackers could break torrents.
+- **Moderate NAT**: Off.
+- **NAT-PMP**: On, this will allow port forwarding.
+- **VPN Accelerator**: On. Just a performance boost.
+- **Server**: Select any server in your preferred country. It's often best to pick something close to you. Make sure to select something with P2P (Peer-to-peer) enabled and with low traffic. Proton's recommendation will usually work best here.
+
+Download the file provided and save it in `~/plex/vpn/config.toml`:
+
+```toml
+[Interface]
+# Key for plex-server
+# Bouncing = 23
+# NetShield = 2
+# Moderate NAT = off
+# NAT-PMP (Port Forwarding) = on
+# VPN Accelerator = on
+PrivateKey = "oK7xV2M9fR8pL3nQ6wE1tY4uI0oP9aS8dF7gH5jK2lZ="
+Address = "10.2.0.18/32"
+DNS = "10.2.0.1"
+
+[Peer]
+# CA-TO#85
+PublicKey = "mN8qR5tY2wE6rT9yU3iO1pA7sD4fG6hJ0kL5zX8cV9b="
+AllowedIPs = [ "0.0.0.0/0", "::/0" ]
+Endpoint = "192.99.15.44:51820"
+```
+
+Then add the private key to your `.env`. This part might not be required; I think Gluetun will work off the `config.toml` file regardless but I've never bothered to mess with my setup and confirm.
 
 ```bash
-OPENVPN_USERNAME="yourusername"
-OPENVPN_PASSWORD="yourpassword"
+WIREGUARD_PRIVATE_KEY="yourprivatekey"
 ```
 
 Then add Gluetun to your `docker-compose.yml`:
@@ -121,77 +150,92 @@ Then add Gluetun to your `docker-compose.yml`:
     devices:
       - /dev/net/tun
     environment:
-      - VPN_SERVICE_PROVIDER=protonvpn
-      - VPN_TYPE=openvpn
-      - OPENVPN_USER=${OPENVPN_USERNAME}
-      - OPENVPN_PASSWORD=${OPENVPN_PASSWORD}
-      - SERVER_COUNTRIES=Canada
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
+      - VPN_SERVICE_PROVIDER=protonvpn
+      - VPN_TYPE=wireguard
+      - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY}
+      - SERVER_COUNTRIES=Canada
+      - VPN_PORT_FORWARDING=on
+      - GLUETUN_HTTP_CONTROL_SERVER_ENABLE=on
     volumes:
-      - ${HOME}/plex/vpn:/vpn
+      - ${PLEX}/vpn:/vpn
     restart: unless-stopped
 ```
 
-## Deluge
+## qBittorrent
 
-Most setup happens within the browser UI itself. You can use any torrent client you like, they'll probably all be relatively similar in terms of setup.
+I use qBittorrent with qSticky, which is an automated port forwarding manager for Gluetun and qBittorrent that will update the forwarded port in qBittorrent whenever it changes in your VPN. You can use any download client you like, but this setup is simplest, in my experience.
 
-Start by adding the directory for your torrents. Make sure this is on the same physical drive as your movies and shows (In this case, `~/plex/data`) in order for hardlinking to work with Radarr and Sonarr.
-
-```bash
-mkdir -p ~/plex/data/torrents
-```
-
-Add the Deluge service to Docker:
+Start by adding qBittorrent to Docker:
 
 ```yaml
-  deluge:
-    image: lscr.io/linuxserver/deluge:latest
-    container_name: deluge
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
+      - WEBUI_PORT=8080
     volumes:
-      - ${HOME}/plex/deluge/config:/config
-      - ${HOME}/plex/data/torrents:/data/torrents
+      - ${PLEX}/qbittorrent/config:/config
+      - ${PLEX}/data/torrents:/data/torrents
     network_mode: service:vpn
     depends_on:
       - vpn
     restart: unless-stopped
 ```
 
-Then expose Deluge’s ports in your VPN service:
+And expose qBittorrent's ports in your VPN service:
 
 ```yaml
   vpn:
     # ...
     ports:
-      - 8112:8112
       - 6881:6881
       - 6881:6881/udp
+      - 8080:8080
 ```
 
-Open the web UI at port 8112 and log in with:
+Open the web UI at port 8080 and log in the temporary credentials printed in the logs, then change your username and password once logged in.
+
+Go to **Tools** > **Options** > **Downloads**, and set the default save path to `/data/torrents`.
+
+Next, set up your `.env` for qSticky:
+
+```bash
+QBITTORRENT_USER="yourusername"
+QBITTORRENT_PASS="yourpassword"
+
+GLUETUN_APIKEY="apikey"
 ```
-Username: admin
-Password: deluge
+> The api key can be created with a command like `openssl rand -hex 32`.
+
+Then add the qSticky service to Docker:
+
+```yaml
+  qsticky:
+    image: ghcr.io/monstermuffin/qsticky:latest
+    container_name: qsticky
+    environment:
+      - QBITTORRENT_HOST=vpn
+      - QBITTORRENT_HTTPS=false
+      - QBITTORRENT_PORT=8080
+      - QBITTORRENT_USER=${QBITTORRENT_USER}
+      - QBITTORRENT_PASS=${QBITTORRENT_PASS}
+      - GLUETUN_HOST=vpn
+      - GLUETUN_AUTH_TYPE=apikey
+      - GLUETUN_APIKEY=${GLUETUN_APIKEY}
+      - LOG_LEVEL=INFO
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import json; exit(0 if json.load(open('/app/health/status.json'))['healthy'] else 1)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
 ```
-
-Change the password, then go to Preferences and update the following:
-
-**Network**
-- Set incoming port to 6881 (otherwise Deluge will randomize it)
-
-**Downloads**
-- Set "Download to" as /data/torrents
-
-**Plugins**
-- Enable Label
-
-We'll revisit Deluge settings later as we add Radarr and Sonarr.
 
 ## Prowlarr
 
@@ -254,8 +298,8 @@ Once Radarr is up and running, access the web UI at port 7878 and change the fol
 - Use [this guide](https://trash-guides.info/Radarr/Radarr-Quality-Settings-File-Size/#radarr-quality-definitions) as a reference
 
 **Download Clients**
-- Click “+”, choose Deluge
-- Set Host to your server’s IP and enter your Deluge password
+- Click “+”, choose qBittorrent
+- Set Host to your server’s IP and enter your qBittorrent login
 - Test and save the connection
 
 **Connect**
@@ -309,7 +353,7 @@ Sonarr manages TV shows the same way Radarr handles movies. The setup and config
 Once running, open the web UI at port 8989 and configure it just like Radarr:
 - Add a root folder: /data/media/tv
 - Set up quality profiles and preferred formats
-- Connect Deluge as your download client
+- Connect qBittorrent as your download client
 - Add your Plex server under Connect
 - Link Sonarr to Prowlarr under Settings > Apps in Prowlarr
 
