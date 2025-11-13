@@ -1,16 +1,14 @@
 collections:
-  Watchparty!:
-    letterboxd_list: https://letterboxd.com/alexbmoreira/list/watchparty/
+  Letterboxd Top 250:
+    letterboxd_list: https://letterboxd.com/dave/list/official-top-250-narrative-feature-films/
+    collection_order: custom
+    sort_title: "!020_Letterboxd Top 250"
     sync_mode: sync
-    smart_label:
-      any:
-        label: <<smart_label>>
-        all:
-          collection:
-            - Pascale Watchlist
-            - Alex Watchlist
-    radarr_add_missing: true
+    visible_library: true
+    visible_home: true
+    visible_shared: true
   Stoner Movies:
+    sort_title: "#02_Stoner Movies"
     letterboxd_list: https://letterboxd.com/buttholesurfer/list/under-the-influence-best-films-to-watch-high/
     sync_mode: sync
     smart_label:
@@ -18,28 +16,19 @@ collections:
         label: <<smart_label>>
         unplayed: true
   Bad Movies:
+    sort_title: "#01_Bad Movies"
     letterboxd_list: https://letterboxd.com/alexbmoreira/list/bad-movies/
     collection_order: custom
     sync_mode: sync
     radarr_add_missing: true
-  Letterboxd Top 250:
-    letterboxd_list: https://letterboxd.com/dave/list/official-top-250-narrative-feature-films/
-    collection_order: custom
-    sync_mode: sync
-    visible_library: true
-    visible_home: true
-    visible_shared: true
-  Pascale Watchlist:
-    letterboxd_list: https://letterboxd.com/pascalee/watchlist/
-    collection_order: custom
-    sync_mode: sync
-    radarr_add_missing: true
   Alex Watchlist:
+    sort_title: "#01_Alex Watchlist"
     letterboxd_list: https://letterboxd.com/alexbmoreira/watchlist/
     collection_order: custom
     sync_mode: sync
     radarr_add_missing: true
   "90 Minutes or Less":
+    sort_title: "#00-1_90 Minutes or Less"
     plex_all: true
     smart_label:
       all:
@@ -47,6 +36,7 @@ collections:
         duration.lte: 90
         unplayed: true
   "2 Hours or Less":
+    sort_title: "#00-2_2 Hours or Less"
     plex_all: true
     visible_library: true
     visible_home: true
@@ -57,6 +47,7 @@ collections:
         duration.lte: 120
         unplayed: true
   "3 Hours or More":
+    sort_title: "#00-3_3 Hours or More"
     plex_all: true
     smart_label:
       all:
@@ -64,22 +55,28 @@ collections:
         duration.gte: 180
         unplayed: true
   Animation:
+    sort_title: "~00_Animation"
     smart_filter:
       all:
         genre: Animation
   Documentaries:
+    sort_title: "~00_Documentaries"
     smart_filter:
       all:
         genre: Documentary
   Walt Disney Animation:
+    sort_title: "~01_Walt Disney Animation"
     tmdb_company:
       - 6125
       - 171656
   Pixar:
+    sort_title: "~01_Pixar"
     tmdb_company: 3
   Studio Ghibli:
+    sort_title: "~01_Studio Ghibli"
     tmdb_company: 10342
   Adam Sandler:
+    sort_title: "~09_Adam Sandler"
     smart_filter:
       any:
         actor: tmdb
@@ -88,4 +85,24 @@ collections:
         writer: tmdb
     tmdb_person: 19292
   Ben Stiller:
+    sort_title: "~09_Ben Stiller"
     tmdb_actor: 7399
+
+  # Pascale Watchlist:
+  #   sort_title: "#01_Pascale Watchlist"
+  #   letterboxd_list: https://letterboxd.com/pascalee/watchlist/
+  #   collection_order: custom
+  #   sync_mode: sync
+  #   radarr_add_missing: true
+  # Watchparty!:
+  #   sort_title: "#01_Watchparty!"
+  #   letterboxd_list: https://letterboxd.com/alexbmoreira/list/watchparty/
+  #   sync_mode: sync
+  #   smart_label:
+  #     any:
+  #       label: <<smart_label>>
+  #       all:
+  #         collection:
+  #           - Pascale Watchlist
+  #           - Alex Watchlist
+  #   radarr_add_missing: true

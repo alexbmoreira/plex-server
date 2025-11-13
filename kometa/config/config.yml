@@ -43,10 +43,10 @@ libraries:
         name_christmas: 🎄 Christmas
         mdblist_list_christmas: https://mdblist.com/lists/hdlists/christmas-movies
         append_data:
-          fall: 🍂 Fall
-        trakt_list_fall:
-        - https://trakt.tv/users/franko12/lists/fall-movies
-        schedule_fall: range(9/13-11/15)
+          fall: Fall
+        letterboxd_list_fall: https://letterboxd.com/alexbmoreira/list/fall-movies-4/
+        schedule_fall: range(9/17-11/30)
+        name_fall: 🍂 Fall
     - file: config/movies.yml
     overlay_files:
     - default: runtimes
