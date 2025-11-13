@@ -17,6 +17,8 @@ A (close to) plug-and-play Plex setup using Docker that includes:
 - **[Arcane](https://getarcane.app/)** for managing Docker containers
 - My own **[Plex Home Theatre](https://github.com/alexbmoreira/plex-home-theatre)** for scheduling movies to be played at a selected time, plus printing tickets with seat numbers (_Work in Progress_).
 
+> This repo also has Docker containers for eBook management through [Booklore](https://github.com/booklore-app/booklore). It's not covered in this tutorial, but it should not be difficult to copy over the configuration.
+
 ## Getting Started
 
 This guide covers basic setup for each app. For more advanced configuration, check the official docs linked above. You can install just Plex or the full suite — each app works independently, with some exceptions (e.g. download clients should use a VPN).
