@@ -11,6 +11,7 @@ cloudflared/
 config/
 data/
 deluge/
+ephemera/
 ersatztv/
 !kometa/config/
 nginx/

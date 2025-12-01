@@ -23,6 +23,7 @@ services:
       - 6881:6881
       - 6881:6881/udp
       - 8080:8080
+      - 8286:8286
     restart: unless-stopped
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:5.1.2
@@ -138,12 +139,6 @@ services:
       - ${PLEX}/prowlarr/data:/config
     ports:
       - 9696:9696
-    restart: unless-stopped
-  byparr:
-    container_name: byparr
-    image: ghcr.io/thephaseless/byparr
-    ports:
-      - 8191:8191
     restart: unless-stopped
   overseerr:
     image: sctx/overseerr:latest
@@ -280,3 +275,29 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+  ephemera:
+    image: ghcr.io/orwellianepilogue/ephemera:latest
+    container_name: ephemera
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - AA_BASE_URL=${AA_BASE_URL}
+      - AA_API_KEY=${AA_API_KEY}
+      - FLARESOLVERR_URL=${FLARESOLVERR_URL}
+    volumes:
+      - ${PLEX}/ephemera/data:/app/data
+      - ${PLEX}/ephemera/downloads:/app/downloads
+      - ${PLEX}/booklore/bookdrop:/app/ingest
+    network_mode: service:vpn
+    depends_on:
+      - vpn
+    restart: unless-stopped
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    environment:
+      - TZ=${TZ}
+      - LOG_LEVEL=info
+      - LOG_HTML=false
+      - CAPTCHA_SOLVER=none
+    restart: unless-stopped
