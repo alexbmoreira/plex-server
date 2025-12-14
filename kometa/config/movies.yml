@@ -7,6 +7,14 @@ collections:
     visible_library: true
     visible_home: true
     visible_shared: true
+  Variety Top 100 Comedies:
+    letterboxd_list: https://letterboxd.com/mikemcmann/list/varietys-top-100-comedies/
+    collection_order: custom
+    sort_title: "!020_Variety Top 100 Comedies"
+    sync_mode: sync
+    visible_library: true
+    visible_home: true
+    visible_shared: true
   Stoner Movies:
     sort_title: "#02_Stoner Movies"
     letterboxd_list: https://letterboxd.com/buttholesurfer/list/under-the-influence-best-films-to-watch-high/
