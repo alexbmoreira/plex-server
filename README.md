@@ -17,7 +17,7 @@ A (close to) plug-and-play Plex setup using Docker that includes:
 - **[Arcane](https://getarcane.app/)** for managing Docker containers
 - My own **[Plex Home Theatre](https://github.com/alexbmoreira/plex-home-theatre)** for scheduling movies to be played at a selected time, plus printing tickets with seat numbers (_Work in Progress_).
 
-> This repo also has Docker containers for eBook management through [Booklore](https://github.com/booklore-app/booklore). It's not covered in this tutorial, but it should not be difficult to copy over the configuration.
+> This repo also has Docker containers for Kobo eBook management through [Booklore](https://github.com/booklore-app/booklore), with [Kepubify](https://pgaskin.net/kepubify/) to convert files to be more compatible with Kobo (highlighting, annotations, etc.) and [Ephemera](https://github.com/OrwellianEpilogue/ephemera) for downloads. It's not covered in this tutorial, but it should not be difficult to copy over the configuration.
 
 ## Getting Started
 
