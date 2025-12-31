@@ -15,6 +15,7 @@ ephemera/
 ersatztv/
 !kometa/config/
 nginx/
+notes/
 overseerr/
 protonvpn/
 prowlarr/

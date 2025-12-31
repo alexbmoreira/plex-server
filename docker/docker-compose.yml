@@ -287,7 +287,7 @@ services:
     volumes:
       - ${PLEX}/ephemera/data:/app/data
       - ${PLEX}/ephemera/downloads:/app/downloads
-      - ${PLEX}/booklore/bookdrop:/app/ingest
+      - ${PLEX}/kepubify/watch:/app/ingest
     network_mode: service:vpn
     depends_on:
       - vpn
@@ -300,4 +300,16 @@ services:
       - LOG_LEVEL=info
       - LOG_HTML=false
       - CAPTCHA_SOLVER=none
+    restart: unless-stopped
+  kepubify:
+    build: ./kepubify
+    container_name: kepubify
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${PLEX}/kepubify/watch.sh:/usr/local/bin/watch.sh:ro
+      - ${PLEX}/kepubify/watch:/watch
+      - ${PLEX}/booklore/bookdrop:/output
     restart: unless-stopped
