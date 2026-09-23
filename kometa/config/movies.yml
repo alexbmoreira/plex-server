@@ -38,10 +38,12 @@ collections:
   "90 Minutes or Less":
     sort_title: "#00-1_90 Minutes or Less"
     plex_all: true
+    sync_mode: sync
     smart_label:
       all:
         label: <<smart_label>>
         duration.lte: 90
+        genre.not: Documentary
         unplayed: true
   "2 Hours or Less":
     sort_title: "#00-2_2 Hours or Less"
@@ -49,18 +51,22 @@ collections:
     visible_library: true
     visible_home: true
     visible_shared: true
+    sync_mode: sync
     smart_label:
       all:
         label: <<smart_label>>
         duration.lte: 120
+        genre.not: Documentary
         unplayed: true
   "3 Hours or More":
     sort_title: "#00-3_3 Hours or More"
     plex_all: true
+    sync_mode: sync
     smart_label:
       all:
         label: <<smart_label>>
         duration.gte: 180
+        genre.not: Documentary
         unplayed: true
   Animation:
     sort_title: "~00_Animation"

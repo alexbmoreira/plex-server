@@ -101,6 +101,7 @@ settings:
   overlay_artwork_filetype: jpg
   overlay_artwork_quality: 75
   show_unfiltered: false
+  auto_sort_hubs:
 webhooks:
   error:
   version:
