@@ -295,7 +295,7 @@ services:
       - vpn
     restart: unless-stopped
   flaresolverr:
-    image: ghcr.io/flaresolverr/flaresolverr:latest
+    image: 21hsmw/flaresolverr:nodriver
     container_name: flaresolverr
     environment:
       - TZ=${TZ}
