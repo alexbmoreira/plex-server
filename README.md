@@ -7,7 +7,7 @@ A (close to) plug-and-play Plex setup using Docker that includes:
 - **[ProtonVPN](https://protonvpn.com/)** as a VPN through [Gluetun](https://github.com/qdm12/gluetun)
 - **[Prowlarr](https://wiki.servarr.com/en/prowlarr)** for indexing torrents
 - **[Radarr](https://wiki.servarr.com/en/radarr)** for movies and **[Sonarr](https://wiki.servarr.com/en/sonarr)** for TV shows
-- **[Overseerr](https://overseerr.dev/)** for adding movies and TV
+- **[Seerr (formerly Overseerr)](https://seerr.dev/)** for adding movies and TV
 - **[Kometa](https://kometa.wiki/en/latest/)** for managing Plex collections
 - **[Bazarr](https://wiki.bazarr.media/)** for subtitles
 - **[Cloudflare](https://www.cloudflare.com/en-ca/)** tunnels for remote access
@@ -311,22 +311,24 @@ Once Radarr is up and running, access the web UI at port 7878 and change the fol
 **Link to Prowlarr**
 - Once Radarr is fully set up, go to **Settings** > **Apps** in Prowlarr and add it as an app.
 
-## Overseerr
+## Seerr
 
-Overseerr provides a clean interface for finding and downloading movies and TV through Radarr and Sonarr. It also allows users to make requests movies if you plan on sharing your library.
+Seerr provides a clean interface for finding and downloading movies and TV through Radarr and Sonarr. It also allows users to make requests movies if you plan on sharing your library.
 
-Simply install Overseerr with Docker:
+Simply install Seerr with Docker:
 
 ```yaml
-  overseerr:
-    image: sctx/overseerr:latest
-    container_name: overseerr
+  seerr:
+    container_name: seerr
+    image: ghcr.io/seerr-team/seerr:latest
     environment:
-      - TZ="America/Toronto"
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
     ports:
       - 5055:5055
     volumes:
-      - ${HOME}/plex/overseerr/data:/app/config
+      - ${HOME}/plex/seerr/data:/app/config
     restart: unless-stopped
 ```
 
@@ -429,7 +431,7 @@ ErsatzTV lets me create an IPTV server with my library. I don't use it a ton, bu
 
 ### Wizarr
 
-Wizarr is used to invite people to your Plex library. It allows you to create a custom onboarding flow that walks new users through signing up for Plex, joining your library, and linking their account to Overseerr to request movies.
+Wizarr is used to invite people to your Plex library. It allows you to create a custom onboarding flow that walks new users through signing up for Plex, joining your library, and linking their account to Seerr to request movies.
 
 ### Arcane
 

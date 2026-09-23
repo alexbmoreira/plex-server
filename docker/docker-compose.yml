@@ -141,10 +141,12 @@ services:
       - 9696:9696
     restart: unless-stopped
   overseerr:
-    image: sctx/overseerr:latest
+    image: ghcr.io/seerr-team/seerr:latest
     container_name: overseerr
     environment:
-      - TZ="America/Toronto"
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
     ports:
       - 5055:5055
     volumes:
