@@ -228,7 +228,7 @@ services:
   # eBooks
 
   booklore:
-    image: booklore/booklore:latest
+    image: grimmory/grimmory:latest
     container_name: booklore
     environment:
       - USER_ID=${BOOKLORE_USER_ID}
