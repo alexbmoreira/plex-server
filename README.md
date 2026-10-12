@@ -145,7 +145,7 @@ Then add Gluetun to your `docker-compose.yml`:
 
 ```yaml
   vpn:
-    image: qmcgaw/gluetun
+    image: qmcgaw/gluetun:latest
     container_name: vpn
     cap_add:
       - NET_ADMIN
@@ -160,11 +160,13 @@ Then add Gluetun to your `docker-compose.yml`:
       - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY}
       - SERVER_COUNTRIES=Canada
       - VPN_PORT_FORWARDING=on
-      - GLUETUN_HTTP_CONTROL_SERVER_ENABLE=on
     volumes:
       - ${PLEX}/vpn:/vpn
+      - ${PLEX}/vpn/auth:/gluetun/auth:ro
     restart: unless-stopped
 ```
+
+> The `vpn/auth` folder holds the authentication config for Gluetun's control server. It's set up in the qBittorrent section below.
 
 ## qBittorrent
 
@@ -214,6 +216,16 @@ QBITTORRENT_PASS="yourpassword"
 GLUETUN_APIKEY="apikey"
 ```
 > The api key can be created with a command like `openssl rand -hex 32`.
+
+Gluetun's control server (the API qSticky polls for the forwarded port) requires authentication, so Gluetun needs to know the same key. Create `vpn/auth/config.toml` in your root folder with the key pasted in. This is the folder mounted at `/gluetun/auth` in the VPN service, and it only grants the read-only routes qSticky needs:
+
+```toml
+[[roles]]
+name = "qsticky"
+routes = ["GET /v1/portforward", "GET /v1/openvpn/portforwarded", "GET /v1/openvpn/status"]
+auth = "apikey"
+apikey = "apikey"
+```
 
 Then add the qSticky service to Docker:
 

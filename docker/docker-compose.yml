@@ -1,7 +1,7 @@
 ---
 services:
   vpn:
-    image: qmcgaw/gluetun
+    image: qmcgaw/gluetun:v3
     container_name: vpn
     cap_add:
       - NET_ADMIN
@@ -16,9 +16,9 @@ services:
       - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY}
       - SERVER_COUNTRIES=Canada
       - VPN_PORT_FORWARDING=on
-      - GLUETUN_HTTP_CONTROL_SERVER_ENABLE=on
     volumes:
       - ${PLEX}/vpn:/vpn
+      - ${PLEX}/vpn/auth:/gluetun/auth:ro
     ports:
       - 6881:6881
       - 6881:6881/udp
